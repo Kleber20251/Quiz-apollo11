@@ -1,0 +1,253 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    /* Space-themed background */
+    background: linear-gradient(180deg, #0a1f44 0%, #050d1a 100%);
+    color: #fff; /* Default text color is light */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items to the top */
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px 20px; /* More padding top/bottom */
+    box-sizing: border-box;
+}
+
+.quiz-container {
+    width: 100%;
+    max-width: 900px; /* Slightly wider container */
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    color: #a0d2eb; /* Lighter blue */
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+#quiz-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Adjusted minmax */
+    gap: 30px; /* Increased gap */
+}
+
+.card-container {
+    width: 100%;
+    height: 400px; /* Increased height for more content space */
+    perspective: 1000px;
+    opacity: 1; /* Default visible */
+    transition: opacity 0.5s ease; /* Transition for locking */
+}
+
+/* Locked state */
+.card-container.locked {
+    opacity: 0.5; /* Dim locked cards */
+    pointer-events: none; /* Disable clicks */
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncier animation */
+    transform-style: preserve-3d;
+    border-radius: 15px; /* More rounded corners */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
+    cursor: pointer;
+    background-color: #fff; /* Card background */
+}
+
+.card-container.flipped .card {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    box-sizing: border-box;
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack content vertically */
+    overflow: hidden; /* Hide content overflowing border-radius */
+    padding: 20px; /* Add padding */
+}
+
+.card-front {
+    background: linear-gradient(145deg, #ffffff 0%, #f0f0f0 100%); /* Subtle gradient */
+    color: #333;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    justify-content: flex-start; /* Align content from the top */
+    padding-top: 30px; /* Space for indicator */
+}
+
+.card-content {
+    flex-grow: 1; /* Allow content to take up space */
+    overflow-y: auto; /* Add scrollbar if content overflows height */
+    padding-right: 10px; /* Space for scrollbar */
+    margin-bottom: 15px; /* Space between content and footer-like area */
+}
+
+/* Scrollbar styles */
+.card-content::-webkit-scrollbar {
+    width: 8px;
+}
+.card-content::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+.card-content::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+.card-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.5);
+}
+
+
+.card-front h2 {
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #004085; /* Dark blue heading */
+    line-height: 1.4; /* Improved readability */
+}
+
+.card-front .options {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* No flex-grow here, options stay grouped */
+}
+
+.card-front .options button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px; /* More padding */
+    margin-bottom: 8px; /* Less space */
+    border-radius: 25px; /* Pill shape buttons */
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.1s ease; /* Add transform transition */
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-front .options button:last-child {
+    margin-bottom: 0;
+}
+
+.card-front .options button:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px); /* Subtle hover effect */
+}
+
+.card-front .options button:active {
+    transform: translateY(0);
+    background-color: #004085;
+}
+
+
+/* --- Card Back Styles --- */
+
+.card-back.correct {
+    background: linear-gradient(145deg, #d4edda 0%, #c3e6cb 100%); /* Light green gradient */
+    color: #155724; /* Dark green */
+    border: 1px solid #c3e6cb;
+}
+
+.card-back.incorrect {
+    background: linear-gradient(145deg, #f8d7da 0%, #f5c6cb 100%); /* Light red gradient */
+    color: #721c24; /* Dark red */
+    border: 1px solid #f5c6cb;
+}
+
+
+.result-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px; /* Space before justification */
+}
+
+.result-indicator {
+    font-size: 3.5em; /* Larger indicator */
+    line-height: 1;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.card-back.correct .result-indicator {
+    color: #28a745; /* Green */
+}
+
+.card-back.incorrect .result-indicator {
+     color: #dc3545; /* Red */
+}
+
+.result-text {
+    font-size: 1.3em; /* Larger result text */
+    font-weight: bold;
+}
+
+.justification {
+    font-size: 0.9em;
+    text-align: justify;
+    line-height: 1.6; /* Improve justification readability */
+    margin-top: 15px; /* Space after result area */
+    padding-top: 15px; /* Add padding top */
+    border-top: 1px dashed rgba(0,0,0,0.2); /* Separator line */
+}
+
+/* Hide justification by default */
+.justification {
+    display: none;
+}
+
+/* Show justification only when card back is correct */
+.card-back.correct .justification {
+    display: block;
+}
+
+/* Quiz Complete Message */
+#quiz-complete-message {
+    margin-top: 40px;
+    padding: 30px;
+    background-color: #4a69bd; /* Blue background */
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#quiz-complete-message h2 {
+    font-family: 'Orbitron', sans-serif;
+    color: #a0d2eb;
+    margin-top: 0;
+}
+
+#quiz-complete-message button {
+    background-color: #28a745; /* Green button */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+#quiz-complete-message button:hover {
+    background-color: #218838;
+}
+
+.hidden {
+    display: none;
+}
